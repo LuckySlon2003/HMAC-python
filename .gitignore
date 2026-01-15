@@ -1,10 +1,84 @@
 # Python-generated files
 __pycache__/
-*.py[oc]
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
 build/
 dist/
 wheels/
-*.egg-info
+*.egg-info/
+.eggs/
 
+# Byte-compiled / optimized
+*.pyo
+*.pyd
+
+# =====================
 # Virtual environments
-.venv
+# =====================
+
+.venv/
+venv/
+ENV/
+env/
+
+# =====================
+# Pytest / Coverage
+# =====================
+
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+nosetests.xml
+coverage.xml
+pytestdebug.log
+
+# =====================
+# Logs
+# =====================
+
+*.log
+
+# =====================
+# macOS
+# =====================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# =====================
+# VS Code
+# =====================
+
+.vscode/
+!.vscode/extensions.json
+
+# =====================
+# IDEs
+# =====================
+
+.idea/
+*.iml
+
+# =====================
+# mypy / type checkers
+# =====================
+
+.mypy_cache/
+.pyright/
+.dmypy.json
+dmypy.json
+
+# =====================
+# uv / pip-tools
+# =====================
+
+.uv/
+pip-wheel-metadata/

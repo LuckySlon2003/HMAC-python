@@ -6,3 +6,6 @@ run/api:
 
 sync:
 	uv sync
+
+rotate-secret:
+	uv run rotate-secret --print
