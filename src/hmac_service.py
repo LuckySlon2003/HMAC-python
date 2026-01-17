@@ -1,4 +1,4 @@
-"""Module with HMAC sign functions"""
+"""Module with HMAC sign functions."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ logger = get_logger(__name__)
 
 
 class HMACSigner:
-    """Class for HMAC sign and verify signature"""
+    """Class for HMAC sign and verify signature."""
 
     def __init__(self) -> None:
         cfg = load_config(CONFIG_FILE)

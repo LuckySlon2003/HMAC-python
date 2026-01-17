@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 
 from src.app import app
 from src.codec import decode_base64urlsafe, encode_base64urlsafe
+from http import HTTPStatus
 
 client = TestClient(app)
 
@@ -20,18 +21,18 @@ def _max_msg_size_bytes() -> int:
 
 def test_sign_verify_success() -> None:
     r1 = client.post("/sign", json={"msg": "hello"})
-    assert r1.status_code == 200
+    assert r1.status_code == HTTPStatus.OK
     signature = r1.json()['signature']
     assert isinstance(signature, str)
 
     r2 = client.post("/verify", json={"msg": "hello", "signature": signature})
-    assert r2.status_code == 200
+    assert r2.status_code == HTTPStatus.OK
     assert r2.json() == {"ok": True}
 
 
 def test_wrong_signature_ok_false() -> None:
     r1 = client.post("/sign", json={"msg": "hello"})
-    assert r1.status_code == 200
+    assert r1.status_code == HTTPStatus.OK
     sig = r1.json()['signature']
 
     sig_bytes = bytearray(decode_base64urlsafe(sig))
@@ -39,29 +40,29 @@ def test_wrong_signature_ok_false() -> None:
     wrong_sig = encode_base64urlsafe(bytes(sig_bytes))
 
     r2 = client.post("/verify", json={"msg": "hello", "signature": wrong_sig})
-    assert r2.status_code == 200
+    assert r2.status_code == HTTPStatus.OK
     assert r2.json() == {"ok": False}
 
 
 def test_changed_message_ok_false() -> None:
     r1 = client.post("/sign", json={"msg": "hello"})
-    assert r1.status_code == 200
+    assert r1.status_code == HTTPStatus.OK
     sig = r1.json()['signature']
 
     r2 = client.post("/verify", json={"msg": "hello!", "signature": sig})
-    assert r2.status_code == 200
+    assert r2.status_code == HTTPStatus.OK
     assert r2.json() == {"ok": False}
 
 
 def test_invalid_base64url_signature_returns_400() -> None:
     r = client.post("/verify", json={"msg": "hello", "signature": "@@@"})
-    assert r.status_code == 400
+    assert r.status_code == HTTPStatus.BAD_REQUEST
     assert r.json() == {"detail": "invalid_signature_format"}
 
 
 def test_empty_msg_returns_400() -> None:
     r = client.post("/sign", json={"msg": ""})
-    assert r.status_code == 400
+    assert r.status_code == HTTPStatus.BAD_REQUEST
     assert r.json() == {"detail": "invalid_msg"}
 
 
@@ -70,4 +71,4 @@ def test_big_message_returns_413() -> None:
     big_msg = "a" * (limit + 1)
 
     r = client.post("/sign", json={"msg": big_msg})
-    assert r.status_code == 413
+    assert r.status_code == HTTPStatus.REQUEST_ENTITY_TOO_LARGE

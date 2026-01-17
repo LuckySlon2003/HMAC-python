@@ -1,4 +1,4 @@
-"""Module with config utils"""
+"""Module with config utils."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Tuple
 
-from src.constants import DIGEST_MAP, HEX_RE, LOG_LEVELS
+from src.constants import DIGEST_MAP, HEX_RE, LOG_LEVELS, MIN_PORT, MAX_PORT
 from src.exceptions import ConfigError
 from src.models import Config
 
@@ -29,8 +29,8 @@ def _parse_listen(value: Any) -> Tuple[str, int]:
     except ValueError as e:
         raise ConfigError('listen port must be an integer') from e
 
-    if not (1 <= port <= 65535):
-        raise ConfigError('listen port must be between 1 and 65535')
+    if not (MIN_PORT <= port <= MAX_PORT):
+        raise ConfigError(f'listen port must be between {MIN_PORT} and {MAX_PORT}')
 
     return host, port
 
@@ -38,24 +38,24 @@ def _parse_listen(value: Any) -> Tuple[str, int]:
 def _decode_secret(secret_str: str) -> bytes:
     """Decode a hex-encoded secret string into raw bytes."""
     if not isinstance(secret_str, str) or not secret_str.strip():
-        raise ConfigError("secret must be a non-empty string")
+        raise ConfigError('secret must be a non-empty string')
 
-    s = secret_str.strip()
+    secret_str = secret_str.strip()
 
-    if len(s) % 2 != 0:
-        raise ConfigError("secret hex length must be even")
+    if len(secret_str) % 2 != 0:
+        raise ConfigError('secret hex length must be even')
 
-    if not HEX_RE.fullmatch(s):
+    if not HEX_RE.fullmatch(secret_str):
         raise ConfigError(
-            "secret must contain only hex characters [0-9a-fA-F]")
+            f'secret must contain only hex characters {HEX_RE}')
 
     try:
-        raw = bytes.fromhex(s)
+        raw = bytes.fromhex(secret_str)
     except ValueError as e:
-        raise ConfigError("secret hex is invalid") from e
+        raise ConfigError('secret hex is invalid') from e
 
     if not raw:
-        raise ConfigError("secret decoded to empty bytes")
+        raise ConfigError('secret decoded to empty bytes')
 
     return raw
 

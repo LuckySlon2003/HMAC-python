@@ -1,8 +1,9 @@
-"""Module with codec functions"""
+"""Module with codec functions."""
 
 import base64
 
 from src.logger import get_logger
+from src.constants import BASE64_BLOCK_SIZE
 
 logger = get_logger(__name__)
 
@@ -24,5 +25,5 @@ def decode_base64urlsafe(data: str) -> bytes:
         logger.warning("Data must be string")
         raise TypeError("data must be str")
 
-    padding = '=' * (-len(data) % 4)
+    padding = '=' * (-len(data) % BASE64_BLOCK_SIZE)
     return base64.urlsafe_b64decode(data + padding)

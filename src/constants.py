@@ -22,3 +22,7 @@ DIGEST_MAP = {
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 CONFIG_FILE = PROJECT_ROOT / "config.json"
+
+BASE64_BLOCK_SIZE = 4
+
+MIN_PORT, MAX_PORT = 1, 65535

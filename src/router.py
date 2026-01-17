@@ -1,4 +1,4 @@
-"""Module with routes"""
+"""Module with routes."""
 
 from typing import Annotated
 

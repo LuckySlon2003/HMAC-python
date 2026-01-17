@@ -1,37 +1,42 @@
-"""Module with models"""
+"""Module with models."""
 
 from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
 class SignRequest:
-    """Model for /sign request"""
+    """Model for /sign request."""
+
     msg: str
 
 
 @dataclass(frozen=True)
 class SignResponse:
-    """Model for /sign response"""
+    """Model for /sign response."""
+
     msg: str
     signature: str
 
 
 @dataclass(frozen=True)
 class VerifyRequest:
-    """Model for /verify request"""
+    """Model for /verify request."""
+
     msg: str
     signature: str
 
 
 @dataclass(frozen=True)
 class VerifyResponse:
-    """Model for /verify response"""
+    """Model for /verify response."""
+
     ok: bool
 
 
 @dataclass(frozen=True, slots=True)
 class Config:
     """Model for application configuration."""
+
     hmac_alg: str
     secret: bytes
     log_level: str
